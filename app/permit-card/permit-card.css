@@ -1,0 +1,67 @@
+/* Override Tailwind lab() colors with RGB for html2canvas compatibility */
+#permit-card,
+#permit-card * {
+  color: rgb(0, 0, 0) !important;
+}
+
+#permit-card .text-white,
+#permit-card .text-white * {
+  color: rgb(255, 255, 255) !important;
+}
+
+#permit-card .text-gray-500,
+#permit-card .text-gray-500 * {
+  color: rgb(107, 114, 128) !important;
+}
+
+#permit-card .text-gray-600,
+#permit-card .text-gray-600 * {
+  color: rgb(75, 85, 99) !important;
+}
+
+#permit-card .text-gray-700,
+#permit-card .text-gray-700 * {
+  color: rgb(55, 65, 81) !important;
+}
+
+#permit-card .text-gray-800,
+#permit-card .text-gray-800 * {
+  color: rgb(31, 41, 55) !important;
+}
+
+#permit-card .text-gray-900,
+#permit-card .text-gray-900 * {
+  color: rgb(17, 24, 39) !important;
+}
+
+#permit-card .bg-white {
+  background-color: rgb(255, 255, 255) !important;
+}
+
+#permit-card .bg-gray-50 {
+  background-color: rgb(249, 250, 251) !important;
+}
+
+#permit-card .bg-gray-100 {
+  background-color: rgb(243, 244, 246) !important;
+}
+
+#permit-card .bg-gray-200 {
+  background-color: rgb(229, 231, 235) !important;
+}
+
+#permit-card .bg-gray-300 {
+  background-color: rgb(209, 213, 219) !important;
+}
+
+#permit-card .bg-green-600 {
+  background-color: rgb(22, 163, 74) !important;
+}
+
+#permit-card .bg-green-700 {
+  background-color: rgb(21, 128, 61) !important;
+}
+
+#permit-card .border-gray-200 {
+  border-color: rgb(229, 231, 235) !important;
+}

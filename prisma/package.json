@@ -1,0 +1,8 @@
+{
+  "name": "prisma-migrations",
+  "scripts": {
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "studio": "prisma studio"
+  }
+}
