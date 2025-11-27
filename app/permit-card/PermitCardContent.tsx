@@ -3,40 +3,17 @@
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, User, Download } from "lucide-react"
-import QRCode from "qrcode"
-import domtoimage from "dom-to-image-more"
+import { ArrowRight, User } from "lucide-react"
 import "./permit-card.css"
 
 export default function PermitCardContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [qrCode, setQrCode] = useState("")
 
   const permitType = searchParams.get("type") || "تصريح زيارة"
   const reserve = searchParams.get("reserve") || "محمية فرسان"
   const duration = searchParams.get("duration") || "يوم واحد"
   const livestockCount = searchParams.get("livestock") || ""
-
-  useEffect(() => {
-    // Generate QR Code
-    const permitData = {
-      type: permitType,
-      reserve: reserve,
-      duration: duration,
-      date: new Date().toLocaleDateString('ar-SA'),
-      id: Math.random().toString(36).substring(7).toUpperCase()
-    }
-    
-    QRCode.toDataURL(JSON.stringify(permitData), {
-      width: 200,
-      margin: 1,
-      color: {
-        dark: '#000000',
-        light: '#FFFFFF'
-      }
-    }).then(setQrCode)
-  }, [permitType, reserve, duration])
 
   const getPermitTitle = () => {
     switch(permitType) {
@@ -55,38 +32,6 @@ export default function PermitCardContent() {
       case "week": return "أسبوع"
       case "month": return "شهر"
       default: return duration
-    }
-  }
-
-  const downloadCard = async () => {
-    const cardElement = document.getElementById('permit-card')
-    if (!cardElement) {
-      alert('لم يتم العثور على البطاقة')
-      return
-    }
-
-    try {
-      const dataUrl = await domtoimage.toPng(cardElement, {
-        quality: 1.0,
-        width: cardElement.offsetWidth * 2,
-        height: cardElement.offsetHeight * 2,
-        style: {
-          transform: 'scale(2)',
-          transformOrigin: 'top left',
-          width: cardElement.offsetWidth + 'px',
-          height: cardElement.offsetHeight + 'px'
-        }
-      })
-
-      const link = document.createElement('a')
-      link.download = `بطاقة-تصريح-${new Date().getTime()}.png`
-      link.href = dataUrl
-      link.click()
-
-      alert('✅ تم تحميل البطاقة بنجاح!')
-    } catch (error) {
-      console.error('خطأ في تحميل البطاقة:', error)
-      alert('❌ حدث خطأ أثناء تحميل البطاقة. يرجى المحاولة مرة أخرى.')
     }
   }
 
@@ -161,17 +106,10 @@ export default function PermitCardContent() {
               </div>
             </div>
 
-            {/* Date and QR Section */}
-            <div className="flex justify-between items-center">
-              <div className="space-y-1">
-                <p className="text-sm text-gray-500">تاريخ الإصدار</p>
-                <p className="text-base font-bold text-gray-800">{new Date().toLocaleDateString('ar-SA-u-ca-islamic-nu-latn')}</p>
-              </div>
-              {qrCode && (
-                <div className="bg-white p-2 rounded-lg border-2 border-gray-200">
-                  <img src={qrCode} alt="QR Code" className="w-24 h-24" />
-                </div>
-              )}
+            {/* Date Section */}
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">تاريخ الإصدار</p>
+              <p className="text-base font-bold text-gray-800">{new Date().toLocaleDateString('ar-SA')}</p>
             </div>
 
             {/* Permit Details */}
@@ -203,19 +141,15 @@ export default function PermitCardContent() {
                 <p className="text-3xl font-bold">فعّال</p>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Download Button */}
-        <div className="w-full max-w-md mx-auto mt-6">
-          <Button
-            data-download-button
-            className="w-full bg-gradient-to-r from-[#c4a35a] to-[#d4b36a] hover:from-[#b39350] hover:to-[#c4a35a] text-white py-6 rounded-2xl text-lg font-semibold shadow-lg flex items-center justify-center gap-2"
-            onClick={downloadCard}
-          >
-            <Download className="w-5 h-5" />
-            تحميل البطاقة
-          </Button>
+            {/* Permit ID */}
+            <div className="text-center pt-2 border-t border-gray-200">
+              <p className="text-sm text-gray-500 mb-2">رقم التصريح:</p>
+              <p className="text-xl font-bold text-gray-900 font-mono">
+                {Math.random().toString(36).substring(2, 10).toUpperCase()}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
