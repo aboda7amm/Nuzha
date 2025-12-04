@@ -135,7 +135,7 @@ export default function LoginPage() {
             <TabsContent value="citizen" className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="citizen-id-type" className="text-sm">
-                  نوع الهوية أو الإقامة / هوية مقيم
+                  الهوية / الإقامة
                 </Label>
                 <Input
                   id="citizen-id-type"

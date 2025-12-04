@@ -14,25 +14,25 @@ export default function AwarenessPage() {
   const sections = [
     {
       id: "1",
-      title: "السلوك البيئي الصحيح داخل المحميات",
+      title: language === 'ar' ? "السلوك البيئي الصحيح داخل المحميات" : "Proper Environmental Behavior in Reserves",
       icon: <Leaf className="w-6 h-6" />,
       href: "#",
     },
     {
       id: "2",
-      title: "مقالات",
+      title: language === 'ar' ? "مقالات" : "Articles",
       icon: <FileText className="w-6 h-6" />,
       href: "#",
     },
     {
       id: "3",
-      title: "تقارير المحميات",
+      title: language === 'ar' ? "تقارير المحميات" : "Reserve Reports",
       icon: <ClipboardList className="w-6 h-6" />,
       href: "#",
     },
     {
       id: "4",
-      title: "نصائح السلامة",
+      title: language === 'ar' ? "نصائح السلامة" : "Safety Tips",
       icon: <Shield className="w-6 h-6" />,
       href: "#",
     },
@@ -61,14 +61,14 @@ export default function AwarenessPage() {
             variant="ghost" 
             size="icon" 
             onClick={() => router.back()}
-            className="bg-white/80 hover:bg-white rounded-full"
+            className={`${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-800' : 'bg-white/80 hover:bg-white'} rounded-full`}
           >
-            <ArrowRight className="w-5 h-5 text-gray-700" />
+            <ArrowRight className={`w-5 h-5 text-gray-700 ${language === 'en' ? 'rotate-180' : ''}`} />
           </Button>
           
           <div className="flex flex-col items-center">
-            <BookOpen className="w-10 h-10 text-[#4a7c59] mb-2" />
-            <h1 className="text-2xl font-bold text-gray-800">التوعية البيئية</h1>
+            <BookOpen className={`w-10 h-10 ${theme === 'dark' ? 'text-green-400' : 'text-[#4a7c59]'} mb-2`} />
+            <h1 className={`text-2xl font-bold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'}`}>{t('awareness')}</h1>
           </div>
           
           <div className="w-10"></div>
@@ -80,10 +80,10 @@ export default function AwarenessPage() {
             <button
               key={section.id}
               onClick={() => section.href !== "#" && router.push(section.href)}
-              className="w-full bg-white/80 hover:bg-white rounded-2xl p-5 flex items-center justify-between transition-all shadow-sm hover:shadow-md"
+              className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-5 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all shadow-sm hover:shadow-md`}
             >
-              <div className="text-gray-600">{section.icon}</div>
-              <span className="text-gray-800 font-medium text-lg">{section.title}</span>
+              <div className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>{section.icon}</div>
+              <span className={`${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} font-medium text-lg`}>{section.title}</span>
             </button>
           ))}
         </div>

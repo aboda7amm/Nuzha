@@ -22,13 +22,21 @@ export default function PermitsPage() {
   const [duration, setDuration] = useState("")
   const [livestockCount, setLivestockCount] = useState("")
 
-  const reserves = [
-    "محمية الإمام سعود بن عبدالعزيز الملكية",
-    "محمية فرسان",
-    "محمية شدا الأعلى",
-    "محمية حرة الحرة",
-    "جزر فرسان",
-  ]
+  const reserves = language === 'ar' 
+    ? [
+        "محمية الإمام سعود بن عبدالعزيز الملكية",
+        "محمية فرسان",
+        "محمية شدا الأعلى",
+        "محمية حرة الحرة",
+        "جزر فرسان",
+      ]
+    : [
+        "Imam Saud bin Abdulaziz Royal Reserve",
+        "Farasan Reserve",
+        "Shada Al-A'la Reserve",
+        "Harrat Al-Harrah Reserve",
+        "Farasan Islands",
+      ]
 
   return (
     <div 

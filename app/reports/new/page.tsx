@@ -43,13 +43,21 @@ export default function NewReportPage() {
     setFilePreview(null)
   }
 
-  const protectedAreas = [
-    "محمية الإمام تركي بن عبدالله الملكية",
-    "محمية الملك عبدالعزيز الملكية",
-    "محمية الملك سلمان الملكية",
-    "محمية الأمير محمد بن سلمان الملكية",
-    "محمية حرة الحرة",
-  ]
+  const protectedAreas = language === 'ar'
+    ? [
+        "محمية الإمام تركي بن عبدالله الملكية",
+        "محمية الملك عبدالعزيز الملكية",
+        "محمية الملك سلمان الملكية",
+        "محمية الأمير محمد بن سلمان الملكية",
+        "محمية حرة الحرة",
+      ]
+    : [
+        "Imam Turki bin Abdullah Royal Reserve",
+        "King Abdulaziz Royal Reserve",
+        "King Salman Royal Reserve",
+        "Prince Mohammed bin Salman Royal Reserve",
+        "Harrat Al-Harrah Reserve",
+      ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -159,8 +167,8 @@ export default function NewReportPage() {
                 onValueChange={(value) => setFormData({ ...formData, protectedArea: value })}
                 required
               >
-                <SelectTrigger className="w-full bg-white border-gray-200 rounded-xl h-12 text-right">
-                  <SelectValue placeholder="اختر المحمية" />
+                <SelectTrigger className={`w-full bg-white border-gray-200 rounded-xl h-12 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+                  <SelectValue placeholder={language === 'ar' ? "اختر المحمية" : "Select Reserve"} />
                 </SelectTrigger>
                 <SelectContent>
                   {protectedAreas.map((area) => (
@@ -176,11 +184,11 @@ export default function NewReportPage() {
             <div className="space-y-2">
               <Input
                 id="title"
-                placeholder="عنوان البلاغ"
+                placeholder={language === 'ar' ? "عنوان البلاغ" : "Report Title"}
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required
-                className="bg-white border-gray-200 rounded-xl h-12 text-right"
+                className={`bg-white border-gray-200 rounded-xl h-12 ${language === 'ar' ? 'text-right' : 'text-left'}`}
               />
             </div>
 
@@ -188,24 +196,30 @@ export default function NewReportPage() {
             <div className="space-y-2">
               <Textarea
                 id="description"
-                placeholder="تفاصيل البلاغ"
+                placeholder={language === 'ar' ? "تفاصيل البلاغ" : "Report Details"}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 required
-                className="bg-white border-gray-200 rounded-xl min-h-32 text-right resize-none"
+                className={`bg-white border-gray-200 rounded-xl min-h-32 ${language === 'ar' ? 'text-right' : 'text-left'} resize-none`}
               />
             </div>
 
             {/* File Upload */}
             <div className="space-y-2">
-              <Label className="text-gray-700 text-sm">إرفاق صورة أو فيديو (اختياري)</Label>
+              <Label className="text-gray-700 text-sm">
+                {language === 'ar' ? 'إرفاق صورة أو فيديو (اختياري)' : 'Attach Image or Video (Optional)'}
+              </Label>
               
               {!selectedFile ? (
                 <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="w-8 h-8 mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-500">اضغط لاختيار صورة أو فيديو</p>
-                    <p className="text-xs text-gray-400 mt-1">PNG, JPG, MP4 (حتى 10MB)</p>
+                    <p className="text-sm text-gray-500">
+                      {language === 'ar' ? 'اضغط لاختيار صورة أو فيديو' : 'Click to select image or video'}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {language === 'ar' ? 'PNG, JPG, MP4 (حتى 10MB)' : 'PNG, JPG, MP4 (up to 10MB)'}
+                    </p>
                   </div>
                   <input
                     type="file"
@@ -254,7 +268,10 @@ export default function NewReportPage() {
               disabled={loading} 
               className="w-full bg-green-800 hover:bg-green-900 text-white rounded-full h-12 text-lg font-semibold mt-6"
             >
-              {loading ? "جاري الإرسال..." : "تأكيد"}
+              {loading 
+                ? (language === 'ar' ? 'جاري الإرسال...' : 'Submitting...') 
+                : (language === 'ar' ? 'تأكيد' : 'Confirm')
+              }
             </Button>
           </form>
         </div>
