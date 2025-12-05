@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowRight, Settings as SettingsIcon, Sun, Moon, Globe, Phone, Mail, Info, HelpCircle, BookOpen } from "lucide-react"
 import { useApp } from "@/contexts/AppContext"
+import BottomNav from "@/components/bottom-nav"
 
 export default function SettingsPage() {
   const router = useRouter()
@@ -28,7 +29,7 @@ export default function SettingsPage() {
       <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-gray-900/80' : 'bg-[#f5efe1]/70'}`}></div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col min-h-screen py-8 px-4">
+      <div className="relative z-10 flex flex-col min-h-screen py-8 px-4 pb-24">
         {/* Header */}
         <div className="w-full max-w-md mx-auto mb-8 flex items-center justify-between">
           <Button 
@@ -135,6 +136,7 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+      <BottomNav />
     </div>
   )
 }

@@ -91,7 +91,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home': 'الرئيسية',
     'permits': 'التصاريح',
     'trips': 'رحلاتي',
-    'myTrips': 'رحلاتي السابقة',
+    'myTrips': 'رحلاتي',
     'touristTrips': 'الرحلات السياحية',
     'report': 'بلاغ بيئي',
     'awareness': 'التوعية البيئية',

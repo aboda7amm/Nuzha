@@ -27,9 +27,25 @@ export default function LoginPage() {
   })
 
   const handleLogin = () => {
-    localStorage.setItem("userName", activeTab === "visitor" ? "زائر" : "مواطن")
-    localStorage.setItem("userId", "demo-user")
-    router.push("/dashboard")
+    // التحقق من بيانات الأمن البيئي
+    const isEnvironmentalSecurity = 
+      activeTab === "citizen" && 
+      citizenData.idType === "123456789" && 
+      citizenData.password === "123456789"
+
+    if (isEnvironmentalSecurity) {
+      // تسجيل دخول الأمن البيئي
+      localStorage.setItem("userName", "الأمن البيئي")
+      localStorage.setItem("userId", "env-security")
+      localStorage.setItem("userRole", "environmental-security")
+      router.push("/drone-control")
+    } else {
+      // تسجيل دخول عادي
+      localStorage.setItem("userName", activeTab === "visitor" ? "زائر" : "مواطن")
+      localStorage.setItem("userId", "demo-user")
+      localStorage.setItem("userRole", "citizen")
+      router.push("/dashboard")
+    }
   }
 
   return (

@@ -75,6 +75,7 @@ export default function Dashboard() {
       iconColorDark: 'text-blue-400',
       bgColor: 'bg-white/80',
       bgColorDark: 'bg-gray-800/80',
+      href: '/articles',
       items: [
         { ar: 'أهمية المحميات الطبيعية', en: 'Importance of Natural Reserves', date: '2024-12-01' },
         { ar: 'الحياة البرية في السعودية', en: 'Wildlife in Saudi Arabia', date: '2024-11-28' },
@@ -90,6 +91,7 @@ export default function Dashboard() {
       iconColorDark: 'text-green-400',
       bgColor: 'bg-white/80',
       bgColorDark: 'bg-gray-800/80',
+      href: '/reserve-reports',
       items: [
         { ar: 'تقرير محمية الإمام سعود 2024', en: 'Imam Saud Reserve Report 2024', date: '2024-12-01' },
         { ar: 'تقرير محمية فرسان 2024', en: 'Farasan Reserve Report 2024', date: '2024-11-15' },
@@ -105,6 +107,7 @@ export default function Dashboard() {
       iconColorDark: 'text-purple-400',
       bgColor: 'bg-white/80',
       bgColorDark: 'bg-gray-800/80',
+      href: '/snapshots',
       items: [
         { ar: 'غزال الريم في محمية الإمام', en: 'Reem Gazelle in Imam Reserve', location: '📍' },
         { ar: 'طيور فرسان المهاجرة', en: 'Farasan Migratory Birds', location: '📍' },
@@ -196,7 +199,7 @@ export default function Dashboard() {
                     <div
                       key={index}
                       className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700/50' : 'bg-gray-50'} hover:scale-[1.02] transition-transform cursor-pointer`}
-                      onClick={() => router.push('/awareness')}
+                      onClick={() => section.href && router.push(section.href)}
                     >
                       <p className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-800'}`}>
                         {language === 'ar' ? item.ar : item.en}

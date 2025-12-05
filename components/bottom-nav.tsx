@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, usePathname } from "next/navigation"
-import { MapPin, Compass, Book, Settings, Tent } from "lucide-react"
+import { MapPin, Compass, Book, Settings, Tent, Home } from "lucide-react"
 import { useApp } from "@/contexts/AppContext"
 
 export default function BottomNav() {
@@ -10,6 +10,12 @@ export default function BottomNav() {
   const { theme, language, t } = useApp()
 
   const navItems = [
+    {
+      id: "home",
+      titleKey: "home",
+      icon: Home,
+      href: "/dashboard",
+    },
     {
       id: "tourist-trips",
       titleKey: "touristTrips",

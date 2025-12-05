@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { ArrowRight, Navigation, MapPin } from "lucide-react"
 import dynamic from 'next/dynamic'
 import { useApp } from "@/contexts/AppContext"
+import BottomNav from "@/components/bottom-nav"
 
 // Import Leaflet dynamically to avoid SSR issues
 const MapComponent = dynamic(() => import('@/components/map-component'), {
@@ -204,6 +205,7 @@ export default function MapPage() {
           )}
         </div>
       </div>
+      <BottomNav />
     </div>
   )
 }
