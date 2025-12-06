@@ -2,9 +2,15 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Battery, Radio, AlertTriangle, MapPin, Camera, Clock, User, Phone, FileText, X, Thermometer, Droplets, Users, Locate, ZoomIn, ZoomOut, Maximize2 } from "lucide-react"
+import { ArrowLeft, Battery, Radio, AlertTriangle, MapPin, Camera, Clock, User, Phone, FileText, X, Thermometer, Droplets, Users, Locate, ZoomIn, ZoomOut, Maximize2, Brain, CheckCircle2, AlertCircle } from "lucide-react"
 
 // أنواع البيانات
+interface AIRecommendation {
+  action: string
+  priority: "high" | "medium" | "low"
+  description: string
+}
+
 interface Violation {
   id: string
   type: string
@@ -13,6 +19,9 @@ interface Violation {
   time: string
   image: string
   severity: "high" | "medium" | "low"
+  aiDetected: boolean
+  aiConfidence: number
+  aiRecommendations: AIRecommendation[]
 }
 
 interface Drone {
@@ -36,6 +45,7 @@ interface Report {
   time: string
   status: "new" | "in-progress" | "resolved"
   image?: string
+  aiRecommendations?: AIRecommendation[]
 }
 
 export default function DroneControlPage() {
@@ -97,14 +107,33 @@ export default function DroneControlPage() {
           location: [26.82, 47.02],
           time: "2025-12-05 14:30",
           image: "/violation-hunting.jpg",
-          severity: "high"
+          severity: "high",
+          aiDetected: true,
+          aiConfidence: 94,
+          aiRecommendations: [
+            {
+              action: "التوجه الفوري للموقع - إحداثيات 26.82, 47.02",
+              priority: "high",
+              description: "اكتشاف مجموعة مسلحة بأدوات صيد في منطقة محظورة. يُنصح بالتنسيق مع الدعم الأمني قبل الاقتراب"
+            },
+            {
+              action: "ضبط المخالفين وحجز الأسلحة والمعدات",
+              priority: "high",
+              description: "تطبيق المادة 15 من نظام البيئة - غرامة تصل إلى 30 مليون ريال للصيد في المحميات"
+            },
+            {
+              action: "إبلاغ مركز العمليات والمركز الوطني لتنمية الحياة الفطرية",
+              priority: "medium",
+              description: "توثيق الحالة في النظام المركزي وإصدار محضر الضبط الإلكتروني"
+            }
+          ]
         }
       ]
     },
     {
       id: "D2",
       name: "درون 2 - محمية سجا وأم الرمث",
-      location: [21.5, 40.0], // الدائرة اليسرى (سبيا)
+      location: [21.5, 40.0], // الدائرة اليسرى (سجا)
       battery: 92,
       status: "active",
       temperature: 28,
@@ -113,12 +142,31 @@ export default function DroneControlPage() {
       violations: [
         {
           id: "V3",
-          type: "تلوث بحري",
-          description: "رصد مخلفات بلاستيكية في المياه الساحلية",
+          type: "قطع أشجار غير مصرح",
+          description: "رصد مجموعة تقوم بقطع أشجار السنط في منطقة محمية",
           location: [21.52, 40.02],
           time: "2025-12-05 15:45",
-          image: "/violation-pollution.jpg",
-          severity: "medium"
+          image: "/violation-trees.jpg",
+          severity: "high",
+          aiDetected: true,
+          aiConfidence: 91,
+          aiRecommendations: [
+            {
+              action: "إيقاف عملية القطع فوراً - موقع 21.52, 40.02",
+              priority: "high",
+              description: "رصد 4 أشخاص يقطعون أشجار السنط بمعدات كهربائية. التدخل الفوري ضروري لمنع مزيد من الأضرار"
+            },
+            {
+              action: "ضبط المخالفين وحجز المعدات والمركبات",
+              priority: "high",
+              description: "غرامة تصل إلى 20 مليون ريال لقطع الأشجار في المحميات (المادة 13 من نظام البيئة)"
+            },
+            {
+              action: "تقييم الأضرار البيئية وإصدار محضر مفصل",
+              priority: "medium",
+              description: "تصوير الموقع وحصر عدد الأشجار المتضررة للمطالبة بالتعويضات"
+            }
+          ]
         }
       ]
     },
@@ -146,34 +194,80 @@ export default function DroneControlPage() {
     }
   ]
 
-  // بيانات وهمية للبلاغات
+  // بيانات وهمية للبلاغات مع توصيات الذكاء الاصطناعي
   const reports: Report[] = [
     {
       id: "R1",
       reporterName: "أحمد محمد",
       reporterPhone: "0501234567",
-      description: "سماع أصوات إطلاق نار في محمية الجبيل",
+      description: "سماع أصوات إطلاق نار في محمية الجبيل البحرية",
       location: [26.85, 47.05],
       time: "2025-12-05 13:00",
-      status: "new"
+      status: "new",
+      aiRecommendations: [
+        {
+          action: "توجيه درون 1 للتحقق الفوري من البلاغ",
+          priority: "high",
+          description: "بلاغ مواطن عن إطلاق نار في 26.85, 47.05. الطائرة على بعد 2.3 كم من الموقع - وقت الوصول المتوقع 3 دقائق"
+        },
+        {
+          action: "تنبيه الدورية البرية الأقرب للاستعداد",
+          priority: "high",
+          description: "إطلاق نار في محمية بحرية يحتمل صيد غير قانوني. يُنصح بالتنسيق مع حرس الحدود"
+        },
+        {
+          action: "الاتصال بالمبلغ للحصول على تفاصيل إضافية",
+          priority: "medium",
+          description: "التواصل مع أحمد محمد (0501234567) لتحديد عدد الأشخاص ونوع الأسلحة"
+        }
+      ]
     },
     {
       id: "R2",
       reporterName: "فاطمة علي",
       reporterPhone: "0559876543",
-      description: "مشاهدة أشخاص يقطعون الأشجار في محمية سجا",
+      description: "مشاهدة رعي جائر للماشية في محمية سجا وأم الرمث",
       location: [21.55, 40.05],
       time: "2025-12-05 11:30",
-      status: "in-progress"
+      status: "in-progress",
+      aiRecommendations: [
+        {
+          action: "التحقق من هوية الرعاة وفحص التصاريح",
+          priority: "high",
+          description: "التوجه للموقع 21.55, 40.05 والتحقق من تصاريح الرعي عبر نظام بلدي. الرعي ممنوع في هذه المنطقة"
+        },
+        {
+          action: "إبعاد الماشية وتغريم المخالف",
+          priority: "high",
+          description: "غرامة 10,000 ريال للرعي الجائر في المحميات (المادة 16). حجز الماشية حتى سداد الغرامة"
+        },
+        {
+          action: "توثيق المخالفة وإحالة المبلغة للمتابعة",
+          priority: "medium",
+          description: "شكر فاطمة علي (0559876543) على البلاغ وإبلاغها بنتيجة المتابعة"
+        }
+      ]
     },
     {
       id: "R3",
       reporterName: "خالد سعيد",
       reporterPhone: "0551112233",
-      description: "وجود مخلفات وقمامة في جزر فرسان",
+      description: "تلوث بحري بمخلفات بلاستيكية في جزر فرسان",
       location: [16.75, 39.55],
       time: "2025-12-04 16:20",
-      status: "resolved"
+      status: "resolved",
+      aiRecommendations: [
+        {
+          action: "تم تنفيذ عملية التنظيف بنجاح ✓",
+          priority: "low",
+          description: "تم إرسال فريق التنظيف وجمع 120 كجم من المخلفات البلاستيكية. تم شكر المبلغ وإغلاق البلاغ"
+        },
+        {
+          action: "تفعيل المراقبة الدورية للمنطقة",
+          priority: "low",
+          description: "جدولة دورية برية للمنطقة كل 3 أيام لمنع تكرار التلوث"
+        }
+      ]
     }
   ]
 
@@ -254,6 +348,24 @@ export default function DroneControlPage() {
     }
   }
 
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "high": return "text-red-600 bg-red-50 border-red-200"
+      case "medium": return "text-orange-600 bg-orange-50 border-orange-200"
+      case "low": return "text-blue-600 bg-blue-50 border-blue-200"
+      default: return "text-gray-600 bg-gray-50 border-gray-200"
+    }
+  }
+
+  const getPriorityText = (priority: string) => {
+    switch (priority) {
+      case "high": return "عاجل"
+      case "medium": return "متوسط"
+      case "low": return "عادي"
+      default: return priority
+    }
+  }
+
   // تحويل الإحداثيات الجغرافية إلى نسب مئوية على الخريطة
   const getPositionOnMap = (lat: number, lng: number) => {
     // حدود السعودية الدقيقة على الخريطة
@@ -288,12 +400,18 @@ export default function DroneControlPage() {
             </button>
             <div>
               <h1 className="text-2xl font-bold">لوحة التحكم - الأمن البيئي</h1>
-              <p className="text-sm opacity-90">مراقبة الدرونز والمخالفات البيئية</p>
+              <p className="text-sm opacity-90">مراقبة الطائرات المسيرة والمخالفات البيئية</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Radio className="w-5 h-5 animate-pulse" />
-            <span className="text-sm">متصل</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-green-600/20 px-3 py-1 rounded-lg">
+              <Brain className="w-5 h-5" />
+              <span className="text-sm font-semibold">AI نشط</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Radio className="w-5 h-5 animate-pulse" />
+              <span className="text-sm">متصل</span>
+            </div>
           </div>
         </div>
       </div>
@@ -304,7 +422,7 @@ export default function DroneControlPage() {
           <div className="bg-card p-4 rounded-lg shadow-md border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">إجمالي الدرونز</p>
+                <p className="text-sm text-muted-foreground">إجمالي الطائرات</p>
                 <p className="text-3xl font-bold text-primary">{drones.length}</p>
               </div>
               <Camera className="w-10 h-10 text-primary opacity-50" />
@@ -313,7 +431,7 @@ export default function DroneControlPage() {
           <div className="bg-card p-4 rounded-lg shadow-md border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">الدرونز النشطة</p>
+                <p className="text-sm text-muted-foreground">الطائرات النشطة</p>
                 <p className="text-3xl font-bold text-green-600">
                   {drones.filter(d => d.status === "active").length}
                 </p>
@@ -324,7 +442,7 @@ export default function DroneControlPage() {
           <div className="bg-card p-4 rounded-lg shadow-md border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">المخالفات المرصودة</p>
+                <p className="text-sm text-muted-foreground">المخالفات المكتشفة</p>
                 <p className="text-3xl font-bold text-red-600">
                   {drones.reduce((acc, d) => acc + d.violations.length, 0)}
                 </p>
@@ -335,161 +453,129 @@ export default function DroneControlPage() {
           <div className="bg-card p-4 rounded-lg shadow-md border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">البلاغات الجديدة</p>
-                <p className="text-3xl font-bold text-orange-600">
-                  {reports.filter(r => r.status === "new").length}
-                </p>
+                <p className="text-sm text-muted-foreground">بلاغات المواطنين</p>
+                <p className="text-3xl font-bold text-blue-600">{reports.length}</p>
               </div>
-              <FileText className="w-10 h-10 text-orange-600 opacity-50" />
+              <FileText className="w-10 h-10 text-blue-600 opacity-50" />
             </div>
           </div>
         </div>
 
-        {/* Map and Drones List */}
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Drones List */}
-          <div className="lg:col-span-1 space-y-4">
-            <div className="bg-card rounded-lg shadow-lg border p-4">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Camera className="w-6 h-6 text-primary" />
-                قائمة الدرونز
-              </h2>
-              <div className="space-y-3">
-                {drones.map((drone) => (
-                  <div
-                    key={drone.id}
-                    onClick={() => handleDroneClick(drone)}
-                    onMouseEnter={() => setHoveredDrone(drone.id)}
-                    onMouseLeave={() => setHoveredDrone(null)}
-                    className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                      hoveredDrone === drone.id || selectedDrone?.id === drone.id
-                        ? 'border-primary bg-primary/5 shadow-md'
-                        : 'border-border hover:border-primary/50'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${drone.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-orange-500'}`}></div>
-                        <h3 className="font-bold text-sm">{drone.name.replace('درون ', 'D')}</h3>
-                      </div>
-                      {drone.violations.length > 0 && (
-                        <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full font-bold">
-                          {drone.violations.length}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="flex items-center gap-1 bg-orange-50 p-2 rounded">
-                        <Thermometer className="w-3 h-3 text-orange-600" />
-                        <span className="font-semibold text-orange-600">{drone.temperature}°C</span>
-                      </div>
-                      <div className="flex items-center gap-1 bg-blue-50 p-2 rounded">
-                        <Droplets className="w-3 h-3 text-blue-600" />
-                        <span className="font-semibold text-blue-600">{drone.humidity}%</span>
-                      </div>
-                      <div className="flex items-center gap-1 bg-purple-50 p-2 rounded">
-                        <Users className="w-3 h-3 text-purple-600" />
-                        <span className="font-semibold text-purple-600">{drone.visitorCount}</span>
-                      </div>
-                      <div className="flex items-center gap-1 bg-green-50 p-2 rounded">
-                        <Battery className="w-3 h-3 text-green-600" />
-                        <span className="font-semibold text-green-600">{drone.battery}%</span>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-2 text-xs text-muted-foreground font-mono bg-gray-50 p-1 rounded text-center">
-                      📡 {drone.location[0].toFixed(4)}, {drone.location[1].toFixed(4)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Reports List */}
-            <div className="bg-card rounded-lg shadow-lg border p-4">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <FileText className="w-6 h-6 text-blue-600" />
-                البلاغات
-              </h2>
-              <div className="space-y-3">
-                {reports.map((report) => (
-                  <div
-                    key={report.id}
-                    onClick={() => handleReportClick(report)}
-                    className="p-3 rounded-lg border cursor-pointer hover:border-blue-500 hover:bg-blue-50/50 transition-all"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">📢</span>
-                        <span className="font-semibold text-sm">{report.reporterName}</span>
-                      </div>
-                      <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(report.status)}`}>
-                        {getStatusText(report.status)}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <Camera className="w-6 h-6" />
+              الطائرات المسيرة
+            </h2>
+            {drones.map((drone) => (
+              <div
+                key={drone.id}
+                onClick={() => handleDroneClick(drone)}
+                className="bg-card p-4 rounded-lg shadow-md border cursor-pointer hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3 className="font-bold text-lg mb-1">{drone.name}</h3>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        drone.status === "active" ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700"
+                      }`}>
+                        {drone.status === "active" ? "نشط" : "يشحن"}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{report.description}</p>
                   </div>
-                ))}
+                  <div className="flex items-center gap-1">
+                    <Battery className="w-4 h-4" />
+                    <span className="text-sm font-semibold">{drone.battery}%</span>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="flex items-center gap-1">
+                    <Thermometer className="w-4 h-4 text-orange-500" />
+                    <span>{drone.temperature}°C</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Droplets className="w-4 h-4 text-blue-500" />
+                    <span>{drone.humidity}%</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4 text-purple-500" />
+                    <span>{drone.visitorCount} زائر</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <AlertTriangle className="w-4 h-4 text-red-500" />
+                    <span>{drone.violations.length} مخالفة</span>
+                  </div>
+                </div>
+
+                {drone.violations.length > 0 && (
+                  <div className="mt-3 pt-3 border-t">
+                    <div className="flex items-center gap-2 text-red-600">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span className="text-sm font-semibold">
+                        {drone.violations.length} مخالفة مكتشفة
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Static Map */}
-          <div className="lg:col-span-2">
-            <div className="bg-card rounded-lg shadow-lg overflow-hidden border relative">
-              <div className="relative" style={{ paddingBottom: '75%' }}>
-                {/* Map Image */}
-                <div className="absolute inset-0 overflow-hidden bg-gray-50">
-                  <img 
-                    src="/saudi-reserves-map.png" 
-                    alt="خريطة السعودية" 
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-300"
-                    style={{ transform: `scale(${zoomLevel})` }}
-                  />
-                </div>
-                
-                {/* Zoom Controls */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2 z-30">
-                  <button
-                    onClick={() => setZoomLevel(prev => Math.min(prev + 0.2, 3))}
-                    className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-lg shadow-lg transition-all flex items-center justify-center"
-                    title="تقريب"
-                  >
-                    <ZoomIn className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setZoomLevel(prev => Math.max(prev - 0.2, 0.5))}
-                    className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-lg shadow-lg transition-all flex items-center justify-center"
-                    title="تبعيد"
-                  >
-                    <ZoomOut className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setZoomLevel(1)}
-                    className="bg-white hover:bg-gray-100 text-gray-800 font-bold p-3 rounded-lg shadow-lg transition-all flex items-center justify-center"
-                    title="إعادة تعيين"
-                  >
-                    <Maximize2 className="w-5 h-5" />
-                  </button>
-                </div>
-                
-                {/* Locate Me Button */}
-                <div className="absolute top-4 right-4 z-30">
-                  <button
-                    onClick={handleLocateMe}
-                    className={`${
-                      isTrackingLocation 
-                        ? 'bg-green-600 hover:bg-green-700 animate-pulse' 
-                        : 'bg-blue-600 hover:bg-blue-700'
-                    } text-white font-semibold px-4 py-3 rounded-lg shadow-lg transition-all flex items-center gap-2`}
-                    title={isTrackingLocation ? "إيقاف التتبع" : "تحديد موقعي"}
-                  >
-                    <Locate className="w-5 h-5" />
-                    <span>{isTrackingLocation ? 'تتبع نشط' : 'موقعي'}</span>
-                  </button>
-                </div>
+          {/* Map */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <MapPin className="w-6 h-6" />
+                خريطة المحميات
+              </h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setZoomLevel(Math.max(0.5, zoomLevel - 0.1))}
+                  className="p-2 bg-card border rounded-lg hover:bg-accent transition-colors"
+                  title="تصغير"
+                >
+                  <ZoomOut className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setZoomLevel(Math.min(2, zoomLevel + 0.1))}
+                  className="p-2 bg-card border rounded-lg hover:bg-accent transition-colors"
+                  title="تكبير"
+                >
+                  <ZoomIn className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setZoomLevel(1)}
+                  className="p-2 bg-card border rounded-lg hover:bg-accent transition-colors"
+                  title="إعادة ضبط"
+                >
+                  <Maximize2 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleLocateMe}
+                  className={`p-2 border rounded-lg transition-colors ${
+                    isTrackingLocation 
+                      ? "bg-blue-600 text-white" 
+                      : "bg-card hover:bg-accent"
+                  }`}
+                  title={isTrackingLocation ? "إيقاف تتبع الموقع" : "تحديد موقعي"}
+                >
+                  <Locate className={`w-5 h-5 ${isTrackingLocation ? "animate-pulse" : ""}`} />
+                </button>
+              </div>
+            </div>
 
+            <div className="bg-card rounded-lg shadow-md border overflow-hidden">
+              <div className="relative w-full" style={{ paddingBottom: "75%" }}>
+                <img
+                  src="/saudi-reserves-map.png"
+                  alt="خريطة المحميات السعودية"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                
                 {/* Drone Markers */}
                 {drones.map((drone) => {
                   const pos = getPositionOnMap(drone.location[0], drone.location[1])
@@ -598,13 +684,13 @@ export default function DroneControlPage() {
             </div>
 
             {/* Legend */}
-            <div className="mt-4 bg-card p-4 rounded-lg shadow-md border">
+            <div className="bg-card p-4 rounded-lg shadow-md border">
               <h3 className="font-bold text-lg mb-3">دليل الخريطة</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-center gap-3">
                   <div className="w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow-md"></div>
                   <div>
-                    <p className="font-semibold">الدرونز</p>
+                    <p className="font-semibold">الطائرات المسيرة</p>
                     <p className="text-sm text-muted-foreground">أخضر: نشط | برتقالي: يشحن</p>
                   </div>
                 </div>
@@ -659,6 +745,44 @@ export default function DroneControlPage() {
                 </div>
               </div>
             </div>
+
+            {/* Citizens Reports */}
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <FileText className="w-6 h-6" />
+                بلاغات المواطنين
+              </h2>
+              {reports.map((report) => (
+                <div
+                  key={report.id}
+                  onClick={() => handleReportClick(report)}
+                  className="bg-card p-4 rounded-lg shadow-md border cursor-pointer hover:shadow-lg transition-shadow"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <User className="w-4 h-4 text-muted-foreground" />
+                        <span className="font-semibold">{report.reporterName}</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-2">{report.description}</p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${getStatusColor(report.status)}`}>
+                      {getStatusText(report.status)}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      <span>{report.time}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      <span>{report.location[0].toFixed(2)}, {report.location[1].toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -666,7 +790,7 @@ export default function DroneControlPage() {
       {/* Violations Modal */}
       {showViolationModal && selectedDrone && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-background rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-background rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-primary text-primary-foreground p-4 flex items-center justify-between">
               <h2 className="text-xl font-bold">مخالفات {selectedDrone.name}</h2>
               <button
@@ -676,18 +800,28 @@ export default function DroneControlPage() {
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-6">
               {selectedDrone.violations.map((violation) => (
-                <div key={violation.id} className="border rounded-lg p-4 space-y-3">
+                <div key={violation.id} className="border rounded-lg p-5 space-y-4">
                   <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="font-bold text-lg">{violation.type}</h3>
-                      <span className={`inline-block px-3 py-1 rounded-full text-sm mt-1 ${getSeverityColor(violation.severity)}`}>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-bold text-xl">{violation.type}</h3>
+                        {violation.aiDetected && (
+                          <div className="flex items-center gap-1 bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs">
+                            <Brain className="w-3 h-3" />
+                            <span>AI {violation.aiConfidence}%</span>
+                          </div>
+                        )}
+                      </div>
+                      <span className={`inline-block px-3 py-1 rounded-full text-sm ${getSeverityColor(violation.severity)}`}>
                         {violation.severity === "high" ? "خطورة عالية" : violation.severity === "medium" ? "خطورة متوسطة" : "خطورة منخفضة"}
                       </span>
                     </div>
                   </div>
+                  
                   <p className="text-muted-foreground">{violation.description}</p>
+                  
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
@@ -698,11 +832,45 @@ export default function DroneControlPage() {
                       <span>{violation.location[0].toFixed(4)}, {violation.location[1].toFixed(4)}</span>
                     </div>
                   </div>
+                  
                   <div className="bg-muted rounded-lg p-3 text-center">
                     <Camera className="w-12 h-12 mx-auto text-muted-foreground mb-2" />
                     <p className="text-sm text-muted-foreground">صورة المخالفة</p>
                     <p className="text-xs text-muted-foreground mt-1">{violation.image}</p>
                   </div>
+
+                  {/* AI Recommendations */}
+                  {violation.aiRecommendations && violation.aiRecommendations.length > 0 && (
+                    <div className="border-t pt-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Brain className="w-5 h-5 text-purple-600" />
+                        <h4 className="font-bold text-lg">القرارات المقترحة بالذكاء الاصطناعي</h4>
+                      </div>
+                      <div className="space-y-3">
+                        {violation.aiRecommendations.map((rec, index) => (
+                          <div 
+                            key={index} 
+                            className={`border rounded-lg p-4 ${getPriorityColor(rec.priority)}`}
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                {rec.priority === "high" ? (
+                                  <AlertCircle className="w-5 h-5" />
+                                ) : (
+                                  <CheckCircle2 className="w-5 h-5" />
+                                )}
+                                <h5 className="font-bold">{rec.action}</h5>
+                              </div>
+                              <span className="text-xs font-semibold px-2 py-1 rounded-full border">
+                                {getPriorityText(rec.priority)}
+                              </span>
+                            </div>
+                            <p className="text-sm">{rec.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -713,7 +881,7 @@ export default function DroneControlPage() {
       {/* Reports Modal */}
       {showReportModal && selectedReport && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-background rounded-lg shadow-2xl max-w-2xl w-full">
+          <div className="bg-background rounded-lg shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="bg-primary text-primary-foreground p-4 flex items-center justify-between rounded-t-lg">
               <h2 className="text-xl font-bold">تفاصيل البلاغ</h2>
               <button
@@ -763,11 +931,46 @@ export default function DroneControlPage() {
                   </div>
                 </div>
               </div>
+              
               <div className="border-t pt-4">
                 <p className="text-sm text-muted-foreground mb-2">تفاصيل البلاغ</p>
                 <p className="text-base">{selectedReport.description}</p>
               </div>
-              <div className="flex gap-3">
+
+              {/* AI Recommendations for Reports */}
+              {selectedReport.aiRecommendations && selectedReport.aiRecommendations.length > 0 && (
+                <div className="border-t pt-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Brain className="w-5 h-5 text-purple-600" />
+                    <h4 className="font-bold text-lg">القرارات المقترحة بالذكاء الاصطناعي</h4>
+                  </div>
+                  <div className="space-y-3">
+                    {selectedReport.aiRecommendations.map((rec, index) => (
+                      <div 
+                        key={index} 
+                        className={`border rounded-lg p-4 ${getPriorityColor(rec.priority)}`}
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            {rec.priority === "high" ? (
+                              <AlertCircle className="w-5 h-5" />
+                            ) : (
+                              <CheckCircle2 className="w-5 h-5" />
+                            )}
+                            <h5 className="font-bold">{rec.action}</h5>
+                          </div>
+                          <span className="text-xs font-semibold px-2 py-1 rounded-full border">
+                            {getPriorityText(rec.priority)}
+                          </span>
+                        </div>
+                        <p className="text-sm">{rec.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-4">
                 <button className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                   بدء المعالجة
                 </button>
