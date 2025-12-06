@@ -137,8 +137,11 @@ const translations: Record<Language, Record<string, string>> = {
     'language': 'اللغة',
     'contact': 'التواصل',
     'learn_more_section': 'لمعرفة المزيد',
+    'learnMore': 'معرفة المزيد',
+    'aboutApp': 'عن تطبيق نُزْهه',
     'about_app': 'عن تطبيق نزهه',
     'faq': 'الأسئلة الشائعة',
+    'userGuide': 'دليل المستخدم',
     'user_guide': 'دليل المستخدم',
     
     // Map
@@ -219,8 +222,11 @@ const translations: Record<Language, Record<string, string>> = {
     'language': 'Language',
     'contact': 'Contact',
     'learn_more_section': 'Learn More',
+    'learnMore': 'Learn More',
+    'aboutApp': 'About Nuzha App',
     'about_app': 'About Nuzha App',
     'faq': 'FAQ',
+    'userGuide': 'User Guide',
     'user_guide': 'User Guide',
     
     // Map

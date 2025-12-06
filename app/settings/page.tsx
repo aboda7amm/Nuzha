@@ -119,17 +119,26 @@ export default function SettingsPage() {
           <div className="space-y-3">
             <h2 className={`text-lg font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} mb-3`}>{t('learn_more_section')}</h2>
             
-            <button className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-4 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all`}>
+            <button 
+              onClick={() => router.push('/about')}
+              className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-4 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all`}
+            >
               <Info className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
               <span className={`${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} font-medium`}>{t('about_app')}</span>
             </button>
 
-            <button className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-4 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all`}>
+            <button 
+              onClick={() => router.push('/faq')}
+              className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-4 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all`}
+            >
               <HelpCircle className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
               <span className={`${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} font-medium`}>{t('faq')}</span>
             </button>
 
-            <button className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-4 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all`}>
+            <button 
+              onClick={() => router.push('/user-guide')}
+              className={`w-full ${theme === 'dark' ? 'bg-gray-800/80 hover:bg-gray-700' : 'bg-white/80 hover:bg-white'} rounded-2xl p-4 flex items-center ${language === 'ar' ? 'justify-between' : 'justify-between flex-row-reverse'} transition-all`}
+            >
               <BookOpen className={`w-5 h-5 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`} />
               <span className={`${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} font-medium`}>{t('user_guide')}</span>
             </button>

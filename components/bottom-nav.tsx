@@ -1,13 +1,15 @@
 "use client"
 
 import { useRouter, usePathname } from "next/navigation"
-import { MapPin, Compass, Book, Settings, Tent, Home } from "lucide-react"
+import { MapPin, Compass, Book, Settings, Tent, Home, Info, ChevronUp } from "lucide-react"
 import { useApp } from "@/contexts/AppContext"
+import { useState } from "react"
 
 export default function BottomNav() {
   const router = useRouter()
   const pathname = usePathname()
   const { theme, language, t } = useApp()
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
 
   const navItems = [
     {
@@ -48,18 +50,79 @@ export default function BottomNav() {
     },
   ]
 
+  const moreMenuItems = [
+    {
+      id: "about",
+      titleKey: "aboutApp",
+      href: "/about",
+    },
+    {
+      id: "faq",
+      titleKey: "faq",
+      href: "/faq",
+    },
+    {
+      id: "user-guide",
+      titleKey: "userGuide",
+      href: "/user-guide",
+    },
+  ]
+
   const isActive = (href: string) => pathname === href
 
   return (
-    <div
-      dir={language === 'ar' ? 'rtl' : 'ltr'}
-      className={`fixed bottom-0 left-0 right-0 ${
-        theme === 'dark' ? 'bg-[#1a1a1a]/95' : 'bg-[#f5efe1]/95'
-      } backdrop-blur-md border-t ${
-        theme === 'dark' ? 'border-gray-700/50' : 'border-[#d4c5a9]/50'
-      } shadow-lg z-50`}
-    >
-      <div className="flex items-center justify-around px-2 py-2 max-w-md mx-auto">
+    <>
+      {/* More Menu Dropdown */}
+      {showMoreMenu && (
+        <div
+          className={`fixed bottom-20 left-0 right-0 mx-auto max-w-md px-4 z-50`}
+        >
+          <div
+            className={`${
+              theme === 'dark' ? 'bg-[#1a1a1a]/98' : 'bg-[#f5efe1]/98'
+            } backdrop-blur-md rounded-2xl shadow-2xl border ${
+              theme === 'dark' ? 'border-gray-700/50' : 'border-[#d4c5a9]/50'
+            } overflow-hidden`}
+          >
+            {moreMenuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  router.push(item.href)
+                  setShowMoreMenu(false)
+                }}
+                className={`w-full px-6 py-4 text-right transition-colors ${
+                  theme === 'dark'
+                    ? 'hover:bg-green-600/20 text-gray-200'
+                    : 'hover:bg-green-700/10 text-gray-800'
+                } border-b last:border-b-0 ${
+                  theme === 'dark' ? 'border-gray-700/50' : 'border-[#d4c5a9]/30'
+                }`}
+              >
+                <span className="text-sm font-semibold">{t(item.titleKey)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Overlay */}
+      {showMoreMenu && (
+        <div
+          className="fixed inset-0 bg-black/20 z-40"
+          onClick={() => setShowMoreMenu(false)}
+        />
+      )}
+
+      <div
+        dir={language === 'ar' ? 'rtl' : 'ltr'}
+        className={`fixed bottom-0 left-0 right-0 ${
+          theme === 'dark' ? 'bg-[#1a1a1a]/95' : 'bg-[#f5efe1]/95'
+        } backdrop-blur-md border-t ${
+          theme === 'dark' ? 'border-gray-700/50' : 'border-[#d4c5a9]/50'
+        } shadow-lg z-50`}
+      >
+        <div className="flex items-center justify-around px-2 py-2 max-w-md mx-auto">
         {navItems.map((item) => {
           const Icon = item.icon
           const active = isActive(item.href)
@@ -99,7 +162,45 @@ export default function BottomNav() {
             </button>
           )
         })}
+        
+        {/* More Button */}
+        <button
+          onClick={() => setShowMoreMenu(!showMoreMenu)}
+          className="flex flex-col items-center justify-center gap-1 min-w-[60px] transition-all py-1"
+        >
+          <div
+            className={`p-2 rounded-xl transition-all ${
+              showMoreMenu
+                ? theme === 'dark'
+                  ? 'bg-green-600/30 text-green-400'
+                  : 'bg-green-700/20 text-green-800'
+                : theme === 'dark'
+                ? 'text-gray-400'
+                : 'text-gray-600'
+            }`}
+          >
+            {showMoreMenu ? (
+              <ChevronUp className="w-5 h-5" />
+            ) : (
+              <Info className="w-5 h-5" />
+            )}
+          </div>
+          <span
+            className={`text-[10px] font-semibold transition-all ${
+              showMoreMenu
+                ? theme === 'dark'
+                  ? 'text-green-400'
+                  : 'text-green-800'
+                : theme === 'dark'
+                ? 'text-gray-400'
+                : 'text-gray-600'
+            }`}
+          >
+            {t('learnMore')}
+          </span>
+        </button>
       </div>
     </div>
+    </>
   )
 }
